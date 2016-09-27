@@ -122,7 +122,7 @@
 				var param = getQueryString();
 				//得たパラメータを+1する
 				var cnt = load(param);
-				img.src = './../../coolboy/boy' + cnt + '.jpg';
+				img.src = '../data/coolboy/boy' + cnt + '.jpg';
 				//img.src = './media/franck_02159.jpg';
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
@@ -182,7 +182,7 @@
 					//次のパラメータ
 					var next = counter(cnt);
 					//次のURLへ飛ぶ
-					if(cnt<6) document.location = ("file:///Users/miyachihanae/DatingScience/clmtrackr/clmtrackr/clm_image2.html?image="+next);
+					if(cnt<6) document.location = ("./clm_image.html?image="+next);
 
 				}, false);
 
