@@ -176,7 +176,8 @@
 					//加えた部分
 					//get positions and write console
 					var positions = ctrack.getCurrentPosition();
-					ds.send({title : 'face', content : 'positions'});
+					ds.push({title : 'face', content : positions});
+					ds.send({title : 'face', content : positions});
 					console.log(positions);
 					document.getElementById('position').innerHTML = positions;
 
