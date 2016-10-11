@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>Download Sample</title>
+    </head>
+    <body>
+      <p>ファイル読み込みテスト</p>
+      <div id="countnumber"></div>
+      <pre id="preview"></pre>
+      <input type="file" id="getfile" accept="text/*">
+        <script type='text/javascript'>
+
+        loadText();
+
+        //ファイル読み込み
+        function loadText(){
+          var file = document.querySelector('#getfile');
+          //ファイルが選択された時実行
+          file.onchange = function(){
+            //ファイルを読み込む
+            var fileList = file.files;
+            var reader = new FileReader();
+            reader.readAsText(fileList[0]);
+
+            reader.onload = function(){
+              var face = reader.result;
+              document.querySelector('#preview').textContent = face;
+              //console.log(face[0][0]);
+            };
+          }
+        }
+
+        //positionの計算
+        /*function calculation(positions){
+					var text = '';
+					for(var i = 0;i < positions.length;i++){
+						for(var j = 0;j < positions[i].length;j++){
+							if(i != j){
+								console.log('' + i + 'x:' + positions[i][0]+',y:'+positions[i][1]+' '+ j + 'x:'+positions[j][0]+',y'+positions[j][1])
+								var distance = Math.sqrt(Math.pow(Math.abs(positions[i][0].toFixed(2)-positions[j][0].toFixed(2)),2) + Math.pow(Math.abs(positions[i][1].toFixed(2)-positions[j][1].toFixed(2)),2));
+								text += ',' + i + j + ',' +  distance + ',';
+								console.log(distance);
+							}
+						}
+					}
+					return text;
+				}*/
+
+        </script>
+    </body>
+</html>
