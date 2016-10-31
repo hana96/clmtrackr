@@ -120,12 +120,11 @@
 				img.onload = function() {
 					cc.drawImage(img,0,0,625, 500);
 				};
-				//console.log("param");
 				//query取得
 				var param = getQueryString();
 				//得たパラメータを+1する
 				var cnt = load(param);
-				img.src = '../data/coolboy/boy' + cnt + '.jpg';
+				img.src = '../data/boy/boy' + cnt + '.jpg';
 				//img.src = './media/franck_02159.jpg';
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
@@ -176,19 +175,32 @@
 					//加えた部分
 					//get positions and write console
 					var positions = ctrack.getCurrentPosition();
-					//ds.push({title : 'face', content : positions});
-					ds.send({title : 'face', content : positions});
-					console.log(positions);
-					document.getElementById('position').innerHTML = positions;
+
+					//距離の計算をして出力内容を渡す
+					getDistanceText(positions);
+
+					//console.log(text);
+					//データベースに保存
+					//ds.push({title : 'face', content : {name:cnt, positions:positions}});
+					//写真のidとpositionを送る
+					//ds.send({title : 'face', content : {name:cnt, positions:positions}});
+
+					//顔座標のdistance(text)を送る
+					//ds.send({title : 'face', content : {name:cnt, positions:text}});
+
+
+					//document.getElementById('position').innerHTML = positions;
 
 					// stop drawloop
 					cancelRequestAnimFrame(drawRequest);
 
 					//次のパラメータ
 					var next = counter(cnt);
-					//次のURLへ飛ぶ
-					if(cnt<6) document.location = ("./clm_image.html?image="+next);
-
+					var countup = function(){
+						//次のURLへ飛ぶ
+						if(cnt<6) document.location = ("./clm_image.html?image="+next);
+					}
+					setTimeout(countup,10000);
 				}, false);
 
 				// update stats on iteration
@@ -323,51 +335,39 @@
 					$('#loadimagetext').addClass("hide");
 				}
 
-				/*function handleDownload() {
-          // ダウンロードしたいコンテンツ、MIMEType、ファイル名
-          var content  = 'abc';
-          var mimeType = 'text/csv';
-          var name     = 'feature.csv';
-
-          // BOMは文字化け対策
-          var bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
-          var blob = new Blob([bom, content], {type : mimeType});
-
-          var a = document.createElement('a');
-          a.download = name;
-          a.target   = '_blank';
-
-          if (window.navigator.msSaveBlob) {
-            // for IE
-            window.navigator.msSaveBlob(blob, name)
-          }
-          else if (window.URL && window.URL.createObjectURL) {
-            // for Firefox
-            a.href = window.URL.createObjectURL(blob);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-          }
-          else if (window.webkitURL && window.webkitURL.createObject) {
-            // for Chrome
-            a.href = window.webkitURL.createObjectURL(blob);
-            a.click();
-					}
-          else {
-            // for Safari
-            window.open('data:' + mimeType + ';base64,' + window.Base64.encode(content), '_blank');
-          }
-        }*/
-				/*$(document).ready(function(){
-
-					console.log("animateClean");
-					animateClean();
-				});*/
 				if(cnt<6){
 					$(window).load(function () {
 						console.log("animateClean");
 						animateClean();
 					});
+				}
+
+				//距離の計算をして出力内容を渡す
+				function getDistanceText(positions){
+					var count = 0;
+					var distance = 0;
+
+					var text = '';
+					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに0を入れる
+					if(cnt <= 1000){
+						text += 1 + ' ';
+					//非イケメンだったら
+					}else{
+						text += 0 + ' ';
+					}
+
+					for(var i = 0;i < positions.length;i++){
+						for(var j = i+1;j < positions.length;j++){
+							if(i != j){
+								distance = Math.sqrt(Math.pow((positions[i][0]-positions[j][0]),2) + Math.pow((positions[i][1]-positions[j][1]),2));
+								text += count+':'+distance+' ';
+								count++;
+							}
+						}
+						ds.send({title : 'face2', content : text});
+						text = '';
+					}
+					ds.send({title : 'face2', content : text});
 				}
 
 			</script>

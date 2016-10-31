@@ -3,7 +3,7 @@ var milkcocoa = new MilkCocoa('hotitl5z6gd.mlkcca.com');
 var ds = milkcocoa.dataStore('position');
 
 ds.on('send', function(sended) {
-//  console.log('sendされました！titleは'+sended.value.title+'contentは'+sended.value.value.index1);
+  //console.log('sendされました！titleは'+sended.value.title+',contentは'+sended.value.content);
   console.log(sended.value.content);
 });
 
