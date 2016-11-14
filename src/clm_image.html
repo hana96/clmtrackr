@@ -115,6 +115,18 @@
 				var cc = document.getElementById('image').getContext('2d');
 				var overlay = document.getElementById('overlay');
 				var overlayCC = overlay.getContext('2d');
+				//イケメン画像の数
+				var cool = 1000;
+				//var cool = 3;
+				//var cool = 1;
+				//非イケメン画像の数
+				var clumsy = 1000;
+				//var clumsy = 3;
+				//var clumsy = 1;
+				//画像の数
+				//var number = 1;
+				//var number = 6;
+				var number = 2000
 
 				var img = new Image();
 				img.onload = function() {
@@ -125,7 +137,6 @@
 				//得たパラメータを+1する
 				var cnt = load(param);
 				img.src = '../data/boy/boy' + cnt + '.jpg';
-				//img.src = './media/franck_02159.jpg';
 
 				var ctrack = new clm.tracker({stopOnConvergence : true});
 				ctrack.init(pModel);
@@ -158,13 +169,19 @@
 				// detect if tracker fails to find a face
 				document.addEventListener("clmtrackrNotFound", function(event) {
 					ctrack.stop();
-					alert("The tracking had problems with finding a face in this image. Try selecting the face in the image manually.")
+					alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
+					//次のパラメータ
+					var next = counter(cnt);
+					if(cnt<number) document.location = ("./clm_image.html?image="+next);
 				}, false);
 
 				// detect if tracker loses tracking of face
 				document.addEventListener("clmtrackrLost", function(event) {
 					ctrack.stop();
-					alert("The tracking had problems converging on a face in this image. Try selecting the face in the image manually.")
+					alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
+					//次のパラメータ
+					var next = counter(cnt);
+					if(cnt<number) document.location = ("./clm_image.html?image="+next);
 				}, false);
 
 				// detect if tracker has converged
@@ -172,24 +189,11 @@
 					document.getElementById('convergence').innerHTML = "CONVERGED";
 					document.getElementById('convergence').style.backgroundColor = "#00FF00";
 
-					//加えた部分
 					//get positions and write console
 					var positions = ctrack.getCurrentPosition();
 
 					//距離の計算をして出力内容を渡す
-					getDistanceText(positions);
-
-					//console.log(text);
-					//データベースに保存
-					//ds.push({title : 'face', content : {name:cnt, positions:positions}});
-					//写真のidとpositionを送る
-					//ds.send({title : 'face', content : {name:cnt, positions:positions}});
-
-					//顔座標のdistance(text)を送る
-					//ds.send({title : 'face', content : {name:cnt, positions:text}});
-
-
-					//document.getElementById('position').innerHTML = positions;
+					getDistanceText(cnt,positions);
 
 					// stop drawloop
 					cancelRequestAnimFrame(drawRequest);
@@ -198,9 +202,9 @@
 					var next = counter(cnt);
 					var countup = function(){
 						//次のURLへ飛ぶ
-						if(cnt<6) document.location = ("./clm_image.html?image="+next);
+						if(cnt<number) document.location = ("./clm_image.html?image="+next);
 					}
-					setTimeout(countup,10000);
+					setTimeout(countup,3000);
 				}, false);
 
 				// update stats on iteration
@@ -335,7 +339,7 @@
 					$('#loadimagetext').addClass("hide");
 				}
 
-				if(cnt<6){
+				if(cnt<number+1){
 					$(window).load(function () {
 						console.log("animateClean");
 						animateClean();
@@ -343,17 +347,16 @@
 				}
 
 				//距離の計算をして出力内容を渡す
-				function getDistanceText(positions){
-					var count = 0;
+				function getDistanceText(no,positions){
+					var count = 1;
 					var distance = 0;
 
-					var text = '';
+					var text = '画像id:'+no+'\n';
 					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに0を入れる
-					if(cnt <= 1000){
-						text += 1 + ' ';
-					//非イケメンだったら
+					if(cnt <= cool){
+						text += '1 ';
 					}else{
-						text += 0 + ' ';
+						text += '0 ';
 					}
 
 					for(var i = 0;i < positions.length;i++){
@@ -364,10 +367,11 @@
 								count++;
 							}
 						}
-						ds.send({title : 'face2', content : text});
+						text += '改行';
+						console.log(text);
+						ds.send({title : 'face', content : text});
 						text = '';
 					}
-					ds.send({title : 'face2', content : text});
 				}
 
 			</script>
