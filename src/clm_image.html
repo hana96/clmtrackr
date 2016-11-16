@@ -118,13 +118,12 @@
 				//イケメン画像の数
 				var cool = 1000;
 				//var cool = 3;
-				//var cool = 1;
+
 				//非イケメン画像の数
 				var clumsy = 1000;
 				//var clumsy = 3;
-				//var clumsy = 1;
+
 				//画像の数
-				//var number = 1;
 				//var number = 6;
 				var number = 2000
 
@@ -356,7 +355,7 @@
 					if(cnt <= cool){
 						text += '1 ';
 					}else{
-						text += '0 ';
+						text += '-1 ';
 					}
 
 					for(var i = 0;i < positions.length;i++){
@@ -367,7 +366,6 @@
 								count++;
 							}
 						}
-						text += '改行';
 						console.log(text);
 						ds.send({title : 'face', content : text});
 						text = '';
