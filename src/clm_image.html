@@ -125,7 +125,7 @@
 
 				//画像の数
 				//var number = 6;
-				var number = 2000
+				var number = 2000;
 
 				var img = new Image();
 				img.onload = function() {
@@ -168,7 +168,8 @@
 				// detect if tracker fails to find a face
 				document.addEventListener("clmtrackrNotFound", function(event) {
 					ctrack.stop();
-					alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
+					//alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
+					console.log("error");
 					//次のパラメータ
 					var next = counter(cnt);
 					if(cnt<number) document.location = ("./clm_image.html?image="+next);
@@ -177,7 +178,8 @@
 				// detect if tracker loses tracking of face
 				document.addEventListener("clmtrackrLost", function(event) {
 					ctrack.stop();
-					alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
+					console.log("error");
+					//alert("The tracking had problems converging on a face in this image. The image skip the next Image.")
 					//次のパラメータ
 					var next = counter(cnt);
 					if(cnt<number) document.location = ("./clm_image.html?image="+next);
@@ -351,7 +353,7 @@
 					var distance = 0;
 
 					var text = '画像id:'+no+'\n';
-					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに0を入れる
+					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに-1を入れる
 					if(cnt <= cool){
 						text += '1 ';
 					}else{
