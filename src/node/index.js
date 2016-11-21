@@ -1,42 +1,39 @@
-var MilkCocoa = require('milkcocoa');
-var milkcocoa = new MilkCocoa('hotitl5z6gd.mlkcca.com');
-var ds = milkcocoa.dataStore('position');
+// meshblu
+var meshblu = require('meshblu');
+var request = require('request');
 
-ds.on('send', function(sended) {
-  //console.log('sendされました！titleは'+sended.value.title+',contentは'+sended.value.content);
-  console.log(sended.value.content);
+var uuid = "86f608e4-8c44-4b8c-ad7c-482854ad8968";
+var token = "69ab3a54";
+var suuid = "86f608e4-8c44-4b8c-ad7c-482854ad8968";
+var server = "210.129.18.160";
+var port = "80";
+
+var conn = meshblu.createConnection({
+ "uuid": uuid,
+ "token": token,
+ "server": server,
+ "port": port
 });
 
-// // sended
-// {
-//     id: [String],
-//     timestamp: [Number],
-//     value: {
-//         title: 'hoge',
-//         content: 'huga'
-//     }
-// }
+conn.on('notReady', function(data){
+    console.log('UUID FAILED AUTHENTICATION!');
+    console.log(data);
+});
 
-// ds.stream().next(function(err, messages){
-//   console.log(messages);
-//   /*
-//   messages -> [{
-//     id: [String],
-//     timestamp: [Number],
-//     value: {
-//         title: '...',
-//         content: '...'
-//     }
-//   },
-//   {
-//     id: [String],
-//     timestamp: [Number],
-//     value: {
-//         title: '...',
-//         content: '...'
-//     }
-//   },
-//   ...
-//   ]
-//   */
-// });
+conn.on('ready', function(data){
+ //console.log('UUID AUTHENTICATED!');
+ //console.log(data);
+
+ conn.on('message', function(data){
+   //console.log('message received');
+   //console.log(data);
+   var json = data;
+   if (json.payload != null){
+     var payload=JSON.parse(json.payload)
+     console.log(payload);
+     //console.log('\n');
+   }
+ });
+conn.status(function (data) {
+ });
+});

@@ -94,6 +94,8 @@
 		<script src="./js/BlobBuilder.min.js"></script>
 		<script src="./js/Filesaver.min.js"></script>
 		<script src="https://cdn.mlkcca.com/v0.6.0/milkcocoa.js"></script>
+		<script src="https://cdn.octoblu.com/js/meshblu/latest/meshblu.bundle.js"></script>
+   	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 		<div id="content">
 			<h2>Face tracking in images</h2>
@@ -110,22 +112,20 @@
 			<div id="text"></div>
 
 			<script>
-				var milkcocoa = new MilkCocoa('hotitl5z6gd.mlkcca.com');
-				var ds = milkcocoa.dataStore('position');
 				var cc = document.getElementById('image').getContext('2d');
 				var overlay = document.getElementById('overlay');
 				var overlayCC = overlay.getContext('2d');
 				//イケメン画像の数
-				var cool = 1000;
-				//var cool = 3;
+				//var cool = 1000;
+				var cool = 3;
 
 				//非イケメン画像の数
-				var clumsy = 1000;
-				//var clumsy = 3;
+				//var clumsy = 1000;
+				var clumsy = 3;
 
 				//画像の数
-				//var number = 6;
-				var number = 2000;
+				var number = 6;
+				//var number = 2000;
 
 				var img = new Image();
 				img.onload = function() {
@@ -300,20 +300,20 @@
         }
 
         function load(param){
-          var cnt;
+          var count;
           if(!param){
-            cnt = 1;
+            count = 1;
           }else{
-            cnt = param["image"];
+            count = param["image"];
           }
-          return cnt;
+          return count;
         }
 
-        function counter(cnt) {
-          var cnt;
-          Number(cnt);
-          cnt++;
-          return cnt;
+        function counter(count) {
+          //var count;
+          Number(count);
+          count++;
+          return count;
         }
 
 				// set up file selector and variables to hold selections
@@ -352,7 +352,7 @@
 					var count = 1;
 					var distance = 0;
 
-					var text = '画像id:'+no+'\n';
+					var text = '';
 					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに-1を入れる
 					if(cnt <= cool){
 						text += '1 ';
@@ -368,11 +368,26 @@
 								count++;
 							}
 						}
-						console.log(text);
-						ds.send({title : 'face', content : text});
-						text = '';
+						//console.log(text);
+						//text = '';
 					}
+					sendTxt(no,text);
 				}
+
+				function sendTxt(no,text){
+					console.log(text);
+					$.ajax({
+  					type: 'POST',
+  					url: 'http://210.129.18.160/messages',
+  					data: {"devices": "86f608e4-8c44-4b8c-ad7c-482854ad8968",
+											"payload":"{\"face"+no+"\":\"" + text + "\"}"},
+  					headers: {
+							'meshblu_auth_uuid': '86f608e4-8c44-4b8c-ad7c-482854ad8968',
+              'meshblu_auth_token': '69ab3a54',
+  					},
+					}).then(function(response){
+				})
+			}
 
 			</script>
 		</div>
