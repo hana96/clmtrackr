@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "milkcocoa": "^0.6.0"
+    "meshblu": "^1.33.1",
+    "milkcocoa": "^0.6.0",
+    "request": "^2.79.0"
   }
 }
