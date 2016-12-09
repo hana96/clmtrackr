@@ -351,9 +351,6 @@
 
 				//距離の計算をして出力内容を渡す
 				function getDistanceText(no,positions){
-					var count = 1;
-					var distance = 0;
-
 					var text = '';
 					//イケメンには最初のラベルに1を、非イケメンには最初のラベルに-1を入れる
 					if(cnt <= cool){
@@ -362,20 +359,19 @@
 						text += '-1 ';
 					}
 
-					for(var i = 0;i < positions.length;i++){
-						for(var j = i+1;j < positions.length;j++){
-							if(i != j){
-								distance = Math.sqrt(Math.pow((positions[i][0]-positions[j][0]),2) + Math.pow((positions[i][1]-positions[j][1]),2));
-								text += count+':'+distance+' ';
-								count++;
-							}
-						}
-					}
+					//全ての距離を書き起こす
+					//text += alldistance(positions);
+
+					//黄金比の距離を書き起こす
+					text += goldenRatio(positions);
+
+					console.log(text);
+					//meshbluでテキストを送る
 					sendTxt(no,text);
 				}
 
 				function sendTxt(no,text){
-					console.log(text);
+					//console.log(text);
 					$.ajax({
   					type: 'POST',
   					url: 'http://210.129.18.160/messages',
@@ -393,6 +389,8 @@
 				var result = confirm("顔検証出来ていますか？");
 				if(result){
 			  	getDistanceText(cnt,positions);
+				}else{
+					console.log("検証キャンセル");
 				}
 				//次のパラメータ
 				var next = counter(cnt);
@@ -402,6 +400,53 @@
 				}
 				setTimeout(countup,3000);
 			}
+
+			function alldistance(positions){
+				var count = 1;
+				var distance = 0;
+				var text = ''
+				for(var i = 0;i < positions.length;i++){
+					for(var j = i+1;j < positions.length;j++){
+						if(i != j){
+							distance = Math.sqrt(Math.pow((positions[i][0]-positions[j][0]),2) + Math.pow((positions[i][1]-positions[j][1]),2));
+							text += count+':'+distance+' ';
+							count++;
+						}
+					}
+				}
+				return text;
+			}
+
+			function goldenRatio(positions){
+				var distance = 0;
+				var distance1 = 0;
+				var count;
+				var text = '';
+				distance = Math.sqrt(Math.pow((positions[2][0]-positions[12][0]),2) + Math.pow((positions[2][1]-positions[12][1]),2));
+				text += '1:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[24][0]-positions[26][0]),2) + Math.pow((positions[24][1]-positions[26][1]),2));
+				text += '2:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[29][0]-positions[31][0]),2) + Math.pow((positions[29][1]-positions[31][1]),2));
+				text += '3:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[23][0]-positions[25][0]),2) + Math.pow((positions[23][1]-positions[25][1]),2));
+				text += '4:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[28][0]-positions[30][0]),2) + Math.pow((positions[28][1]-positions[30][1]),2));
+				text += '5:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[25][0]-positions[30][0]),2) + Math.pow((positions[25][1]-positions[30][1]),2));
+				text += '6:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[33][0]-positions[62][0]),2) + Math.pow((positions[33][1]-positions[62][1]),2));
+				text += '7:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[23][0]-positions[25][0]),2) + Math.pow((positions[23][1]-positions[25][1]),2));
+				distance1 = Math.sqrt(Math.pow((positions[25][0]-positions[30][0]),2) + Math.pow((positions[25][1]-positions[30][1]),2))
+				distance = Math.abs(distance-distance1);
+				text += '8:'+distance+' ';
+				distance = Math.sqrt(Math.pow((positions[29][0]-positions[31][0]),2) + Math.pow((positions[29][1]-positions[31][1]),2));
+				distance1 = Math.sqrt(Math.pow((positions[25][0]-positions[30][0]),2) + Math.pow((positions[25][1]-positions[30][1]),2))
+				distance = Math.abs(distance-distance1);
+				text += '9:'+distance+' ';
+				return text;
+			}
+
 			</script>
 		</div>
 	</body>
